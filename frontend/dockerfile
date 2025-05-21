@@ -2,6 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Accept env as build args
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
+
 # Copy package files
 COPY ./package*.json ./
 
@@ -11,8 +15,8 @@ RUN npm ci
 # Copy source code
 COPY ./ ./
 
-# Build the app
-RUN npm run build
+# Build with the correct API URL
+RUN VITE_API_URL=$VITE_API_URL npm run build
 
 # Install a simple http server to serve the static content
 RUN npm install -g http-server
@@ -20,9 +24,5 @@ RUN npm install -g http-server
 # Expose port
 EXPOSE 8080
 
-# Environment variables with defaults that can be overridden
-ENV VITE_API_HOST=api
-ENV VITE_API_PORT=3001
-
-# Start the http server
+# Default start command
 CMD ["http-server", "dist", "-p", "8080"]
