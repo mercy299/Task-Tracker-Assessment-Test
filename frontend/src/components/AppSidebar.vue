@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
-import { ref, computed, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useLabelStore } from '../stores/labelStore';
 
 const labelStore = useLabelStore();

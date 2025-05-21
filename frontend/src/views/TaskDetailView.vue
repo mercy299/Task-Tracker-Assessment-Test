@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { formatDistanceToNow, format } from 'date-fns';
-import { useTaskStore } from '../stores/taskStore';
-import { useNotificationsStore } from '../stores/notificationsStore';
-import LabelBadge from '../components/LabelBadge.vue';
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { formatDistanceToNow, format } from "date-fns";
+import { useTaskStore } from "../stores/taskStore";
+import { useNotificationsStore } from "../stores/notificationsStore";
+import LabelBadge from "../components/LabelBadge.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -23,50 +23,50 @@ onMounted(async () => {
     await taskStore.fetchTask(taskId);
   } catch (error) {
     notificationsStore.addNotification({
-      type: 'error',
-      message: 'Failed to load task details'
+      type: "error",
+      message: "Failed to load task details",
     });
-    router.push('/tasks');
+    router.push("/tasks");
   } finally {
     loading.value = false;
   }
 });
 
 const statusColor = computed(() => {
-  if (!taskStore.currentTask) return '';
+  if (!taskStore.currentTask) return "";
 
   switch (taskStore.currentTask.status) {
-    case 'completed':
-      return 'var(--color-success)';
-    case 'in-progress':
-      return 'var(--color-primary)';
+    case "completed":
+      return "var(--color-success)";
+    case "in-progress":
+      return "var(--color-primary)";
     default:
-      return 'var(--color-warning)';
+      return "var(--color-warning)";
   }
 });
 
 const priorityColor = computed(() => {
-  if (!taskStore.currentTask) return '';
+  if (!taskStore.currentTask) return "";
 
   switch (taskStore.currentTask.priority) {
-    case 'high':
-      return 'var(--color-error)';
-    case 'medium':
-      return 'var(--color-accent)';
-    case 'low':
-      return 'var(--color-success)';
+    case "high":
+      return "var(--color-error)";
+    case "medium":
+      return "var(--color-accent)";
+    case "low":
+      return "var(--color-success)";
     default:
-      return 'var(--color-accent)';
+      return "var(--color-accent)";
   }
 });
 
-const formatDate = (dateString) => {
-  if (!dateString) return 'Not set';
-  return format(new Date(dateString), 'PPP');
+const formatDate = (dateString: string | undefined) => {
+  if (!dateString) return "Not set";
+  return format(new Date(dateString), "PPP");
 };
 
-const formatRelativeDate = (dateString) => {
-  if (!dateString) return '';
+const formatRelativeDate = (dateString: string | undefined) => {
+  if (!dateString) return "";
   return formatDistanceToNow(new Date(dateString), { addSuffix: true });
 };
 
@@ -78,24 +78,24 @@ const toggleTaskStatus = async () => {
   if (!taskStore.currentTask) return;
 
   const newStatus =
-    taskStore.currentTask.status === 'completed' ? 'pending' : 'completed';
+    taskStore.currentTask.status === "completed" ? "pending" : "completed";
 
   try {
     await taskStore.updateTask({
       id: taskId,
-      status: newStatus
+      status: newStatus,
     });
 
     notificationsStore.addNotification({
-      type: 'success',
+      type: "success",
       message: `Task marked as ${
-        newStatus === 'completed' ? 'completed' : 'pending'
-      }`
+        newStatus === "completed" ? "completed" : "pending"
+      }`,
     });
   } catch (error) {
     notificationsStore.addNotification({
-      type: 'error',
-      message: 'Failed to update task status'
+      type: "error",
+      message: "Failed to update task status",
     });
   }
 };
@@ -110,15 +110,15 @@ const deleteTask = async () => {
     await taskStore.deleteTask(taskId);
 
     notificationsStore.addNotification({
-      type: 'success',
-      message: 'Task deleted successfully'
+      type: "success",
+      message: "Task deleted successfully",
     });
 
-    router.push('/tasks');
+    router.push("/tasks");
   } catch (error) {
     notificationsStore.addNotification({
-      type: 'error',
-      message: 'Failed to delete task'
+      type: "error",
+      message: "Failed to delete task",
     });
   }
 };
@@ -128,7 +128,7 @@ const cancelDelete = () => {
 };
 
 const backToTasks = () => {
-  router.push('/tasks');
+  router.push("/tasks");
 };
 </script>
 
@@ -157,14 +157,14 @@ const backToTasks = () => {
           <button
             :class="[
               'status-button',
-              taskStore.currentTask.status === 'completed' ? 'completed' : ''
+              taskStore.currentTask.status === 'completed' ? 'completed' : '',
             ]"
             @click="toggleTaskStatus"
           >
             {{
-              taskStore.currentTask.status === 'completed'
-                ? 'Mark as Pending'
-                : 'Mark as Completed'
+              taskStore.currentTask.status === "completed"
+                ? "Mark as Pending"
+                : "Mark as Completed"
             }}
           </button>
           <button @click="editTask">Edit</button>
@@ -186,7 +186,7 @@ const backToTasks = () => {
             class="meta-value status-badge"
             :style="{ backgroundColor: statusColor }"
           >
-            {{ taskStore.currentTask.status.replace('-', ' ') }}
+            {{ taskStore.currentTask.status.replace("-", " ") }}
           </span>
         </div>
 
